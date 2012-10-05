@@ -1,0 +1,1 @@
+Remember : statics fields are omitted for dependency injection
