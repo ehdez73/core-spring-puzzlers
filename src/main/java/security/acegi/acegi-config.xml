@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+<!-- ****** START ACEGI Security Configuration *******-->
+<!-- ======================== FILTER CHAIN ======================= -->
+
+<!-- if you wish to use channel security, add "channelProcessingFilter," in front of "httpSessionContextIntegrationFilter" in the list below -->
+<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+	<property name="filterInvocationDefinitionSource">
+		<value>
+		CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+		PATTERN_TYPE_APACHE_ANT
+		/**=httpSessionContextIntegrationFilter,formAuthenticationProcessingFilter,exceptionTranslationFilter ,filterSecurityInterceptor
+		</value>
+	</property>
+</bean>
+
+<!-- Start Security filter config -->
+<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+	<property name="authenticationEntryPoint">
+		<ref bean="formLoginAuthenticationEntryPoint" />
+	</property>
+</bean>
+
+<!-- Define filter to handle BASIC authentication -->
+<bean id="basicProcessingFilter" class="org.acegisecurity.ui.basicauth.BasicProcessingFilter">
+	<property name="authenticationManager">
+		<ref bean="authenticationManager" />
+	</property>
+	<property name="authenticationEntryPoint">
+		<ref bean="authenticationEntryPoint" />
+	</property>
+</bean>
+
+<!-- Define realm for BASIC login-->
+<bean id="authenticationEntryPoint" class="org.acegisecurity.ui.basicauth.BasicProcessingFilterEntryPoint">
+	<property name="realmName">
+		<value>Spring Web Realm</value>
+	</property>
+</bean>
+
+<!-- Define filter to handle FORM authentication -->
+<bean id="formAuthenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+	<property name="filterProcessesUrl">
+		<value>/j_acegi_security_check</value>
+	</property>
+	<property name="authenticationFailureUrl">
+		<value>/loginFailed.htm</value>
+	</property>
+	<property name="defaultTargetUrl">
+		<value>/home.htm</value>
+	</property>
+	<property name="authenticationManager">
+		<ref bean="authenticationManager" />
+	</property>
+</bean>
+
+<!-- Define realm for FORM login-->
+<bean id="formLoginAuthenticationEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+	<property name="loginFormUrl">
+		<value>/index.htm</value>
+	</property>
+	<property name="forceHttps">
+		<value>false</value>
+	</property>
+</bean>
+
+<bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter" />
+
+<!-- End Security filter config -->
+
+<!-- Start Security interceptor config -->
+<!-- Define authentication manager, decision manager and secure URL patterns -->
+<bean id="filterSecurityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+	<property name="authenticationManager">
+		<ref bean="authenticationManager" />
+	</property>
+	<property name="accessDecisionManager">
+		<ref bean="accessDecisionManager" />
+	</property>
+	<property name="objectDefinitionSource">
+		<value>
+		CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+		PATTERN_TYPE_APACHE_ANT 
+		/company/**=ROLE_COMPANY
+		/**=ROLE_USER
+		</value>
+	</property>
+</bean>
+<!-- End Security interceptor config -->
+
+<!-- Start authentication config -->
+<bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager ">
+	<property name="providers">
+		<list>
+			<ref bean="daoAuthenticationProvider" />
+		</list>
+	</property>
+</bean>
+
+<bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+	<property name="userDetailsService">
+		<ref bean="userDetailsService" />
+	</property>
+</bean>
+
+<!-- Authentication using JDBC Dao -->
+<bean id="userDetailsService" class="org.acegisecurity.userdetails.jdbc.JdbcDaoImpl">
+	<property name="dataSource">
+		<ref bean="dataSource"/>
+	</property>
+</bean>
+
+<!-- End authentication config -->
+
+<!-- Start authorization config -->
+<bean id="accessDecisionManager" class="org.acegisecurity.vote.UnanimousBased">
+	<property name="decisionVoters">
+		<list>
+			<ref bean="roleVoter" />
+		</list>
+	</property>
+</bean>
+
+<bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter">
+	<property name="rolePrefix">
+		<value>ROLE_</value>
+	</property>
+</bean>
+<!-- End authorization config -->
+
+<!-- ****** END ACEGI Security Configuration *******-->
+</beans>

@@ -59,6 +59,24 @@
 	      <artifactId>spring-tx</artifactId>
 	      <version>${spring.framework.version}</version>
 	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.springframework.security</groupId>
+	      <artifactId>spring-security-config</artifactId>
+	      <version>${spring.framework.version}</version>
+	    </dependency>
+	     
+	    <dependency>
+	      <groupId>org.springframework.security</groupId>
+	      <artifactId>spring-security-core</artifactId>
+	      <version>${spring.framework.version}</version>
+	    </dependency>
+	    
+	     <dependency>
+	      <groupId>org.springframework.security</groupId>
+	      <artifactId>spring-security-web</artifactId>
+	      <version>${spring.framework.version}</version>
+	    </dependency>
 
 		<dependency>
 			<groupId>log4j</groupId>
@@ -87,6 +105,11 @@
 	      <scope>compile</scope>
 	      <optional>true</optional>      
 	    </dependency>
+	    <dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+		</dependency>
 		
 	</dependencies>
 

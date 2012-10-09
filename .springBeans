@@ -9,6 +9,7 @@
 	<configs>
 		<config>src/main/java/di/example1/spring-config.xml</config>
 		<config>src/main/java/tx/example1/spring-config.xml</config>
+		<config>src/main/java/security/acegi/security-config.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
