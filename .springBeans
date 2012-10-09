@@ -7,9 +7,8 @@
 	</configSuffixes>
 	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
-		<config>src/main/java/samples/aop/example1/spring-config.xml</config>
-		<config>src/main/java/samples/di/example1/spring-config.xml</config>
-		<config>src/main/java/samples/tx/example1/spring-config.xml</config>
+		<config>src/main/java/di/example1/spring-config.xml</config>
+		<config>src/main/java/tx/example1/spring-config.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
